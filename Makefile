@@ -36,22 +36,20 @@ VPATH = ..
 ###############################################################################
 # Project settings
 
-PROJECT := MoteII
+PROJECT := NucleoL073RZ
 
 # Project settings
 ###############################################################################
 # Objects and Paths
 
-OBJECTS += ./src/apps/LoRaMac/classA/MoteII/main.o
-OBJECTS += ./src/apps/LoRaMac/classA/MoteII/buttons.o
-OBJECTS += ./src/apps/LoRaMac/classA/MoteII/screen.o
+OBJECTS += ./src/apps/LoRaMac/classA/$(PROJECT)/main.o
 OBJECTS += ./src/boards/mcu/stm32/utilities.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal.o
-OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_adc.o
-OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_adc_ex.o
+#OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_adc.o
+#OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_adc_ex.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_cortex.o
-OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_i2c.o
-OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_i2c_ex.o
+#OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_i2c.o
+#OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_i2c_ex.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_gpio.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_pwr.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_pwr_ex.o
@@ -62,37 +60,36 @@ OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_rtc_ex.
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_spi.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_uart.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_uart_ex.o
-OBJECTS += ./src/boards/$(PROJECT)/adc-board.o
+#OBJECTS += ./src/boards/$(PROJECT)/adc-board.o
 OBJECTS += ./src/boards/$(PROJECT)/board.o
-OBJECTS += ./src/boards/$(PROJECT)/display-board.o
 #OBJECTS += ./src/boards/$(PROJECT)/eeprom-board.o
 OBJECTS += ./src/boards/$(PROJECT)/gpio-board.o
-OBJECTS += ./src/boards/$(PROJECT)/gps-board.o
-OBJECTS += ./src/boards/$(PROJECT)/i2c-board.o
+#OBJECTS += ./src/boards/$(PROJECT)/gps-board.o
+#OBJECTS += ./src/boards/$(PROJECT)/i2c-board.o
 OBJECTS += ./src/boards/$(PROJECT)/rtc-board.o
 OBJECTS += ./src/boards/$(PROJECT)/spi-board.o
 OBJECTS += ./src/boards/$(PROJECT)/sx1272-board.o
 OBJECTS += ./src/boards/$(PROJECT)/uart-board.o
 #OBJECTS += ./src/boards/$(PROJECT)/uart-usb-board.o
 OBJECTS += ./src/boards/$(PROJECT)/cmsis/system_stm32l0xx.o
-OBJECTS += ./src/boards/$(PROJECT)/cmsis/arm-gcc/startup_stm32l051xx.o
+OBJECTS += ./src/boards/$(PROJECT)/cmsis/arm-gcc/startup_stm32l073xx.o
 OBJECTS += ./src/mac/LoRaMac.o
 OBJECTS += ./src/mac/LoRaMacCrypto.o
 OBJECTS += ./src/mac/region/Region.o
 OBJECTS += ./src/mac/region/RegionCommon.o
 OBJECTS += ./src/mac/region/RegionEU868.o
-OBJECTS += ./src/peripherals/gpio-ioe.o
-OBJECTS += ./src/peripherals/mma8451.o
-OBJECTS += ./src/peripherals/mpl3115.o
-OBJECTS += ./src/peripherals/pam7q.o
-OBJECTS += ./src/peripherals/sx1509.o
+#OBJECTS += ./src/peripherals/gpio-ioe.o
+#OBJECTS += ./src/peripherals/mma8451.o
+#OBJECTS += ./src/peripherals/mpl3115.o
+#OBJECTS += ./src/peripherals/pam7q.o
+#OBJECTS += ./src/peripherals/sx1509.o
 OBJECTS += ./src/radio/sx1272/sx1272.o
-OBJECTS += ./src/system/adc.o
+#OBJECTS += ./src/system/adc.o
 OBJECTS += ./src/system/delay.o
 OBJECTS += ./src/system/fifo.o
 OBJECTS += ./src/system/gpio.o
-OBJECTS += ./src/system/gps.o
-OBJECTS += ./src/system/i2c.o
+#OBJECTS += ./src/system/gps.o
+#OBJECTS += ./src/system/i2c.o
 OBJECTS += ./src/system/timer.o
 OBJECTS += ./src/system/uart.o
 OBJECTS += ./src/system/crypto/aes.o
@@ -113,7 +110,7 @@ INCLUDE_PATHS += -I../src/system/crypto
 
 LIBRARY_PATHS :=
 LIBRARIES :=
-LINKER_SCRIPT ?= ../src/boards/$(PROJECT)/cmsis/arm-gcc/stm32l051xx_flash.ld
+LINKER_SCRIPT ?= ../src/boards/$(PROJECT)/cmsis/arm-gcc/stm32l073xx_flash.ld
 
 # Objects and Paths
 ###############################################################################
@@ -131,7 +128,7 @@ C_FLAGS += -std=gnu99
 C_FLAGS += -flto
 C_FLAGS += -DREGION_EU868
 C_FLAGS += -DUSE_HAL_DRIVER
-C_FLAGS += -DSTM32L051xx
+C_FLAGS += -DSTM32L073xx
 
 CXX_FLAGS += -std=gnu++98
 CXX_FLAGS += -fno-rtti
@@ -139,7 +136,7 @@ CXX_FLAGS += -flto
 CXX_FLAGS += -Wvla
 CXX_FLAGS += -DREGION_EU868
 CXX_FLAGS += -DUSE_HAL_DRIVER
-CXX_FLAGS += -DSTM32L051xx
+CXX_FLAGS += -DSTM32L073xx
 
 ASM_FLAGS += -x
 ASM_FLAGS += assembler-with-cpp
