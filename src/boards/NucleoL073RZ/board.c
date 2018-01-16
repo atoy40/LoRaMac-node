@@ -26,8 +26,8 @@ Maintainer: Miguel Luis and Gregory Cristian
  * LED GPIO pins objects
  */
 Gpio_t Led1;
-Gpio_t Led2;
-Gpio_t Led3;
+//Gpio_t Led2;
+//Gpio_t Led3;
 
 /*
  * MCU objects
@@ -128,29 +128,30 @@ void BoardInitMcu( void )
         HAL_Init( );
 
         // LEDs
-        //GpioInit( &Led1, LED_1, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 1 );
+        GpioInit( &Led1, LED_1, PIN_OUTPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
 
         SystemClockConfig( );
 
         GpioInit( &ioPin, UART_RX, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-        if( GpioRead( &ioPin ) == 1 )   // Debug Mode
+
+        /*if( GpioRead( &ioPin ) == 1 )   // Debug Mode
         {
             UsbIsConnected = true;
             FifoInit( &Uart1.FifoTx, UartTxBuffer, UART_FIFO_TX_SIZE );
             FifoInit( &Uart1.FifoRx, UartRxBuffer, UART_FIFO_RX_SIZE );
             // Configure your terminal for 8 Bits data (7 data bit + 1 parity bit), no parity and no flow ctrl
-            UartInit( &Uart1, UART_1, UART_TX, UART_RX );
+            UartInit( &Uart1, UART_2, UART_TX, UART_RX );
             UartConfig( &Uart1, RX_TX, 115200, UART_8_BIT, UART_1_STOP_BIT, NO_PARITY, NO_FLOW_CTRL );
         }
         else
         {
             UsbIsConnected = false;
             UartDeInit( &Uart1 );
-        }
-
+        }*/
+return;
         RtcInit( );
 
-        BoardUnusedIoInit( );
+        //BoardUnusedIoInit( );
     }
     else
     {
@@ -160,8 +161,8 @@ void BoardInitMcu( void )
     //I2cInit( &I2c, I2C_SCL, I2C_SDA );
     //AdcInit( &Adc, BAT_LEVEL_PIN );
 
-    SpiInit( &SX1272.Spi, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC );
-    SX1272IoInit( );
+    //SpiInit( &SX1272.Spi, RADIO_MOSI, RADIO_MISO, RADIO_SCLK, NC );
+    //SX1272IoInit( );
 
     if( McuInitialized == false )
     {
@@ -235,13 +236,16 @@ void SystemClockConfig( void )
     __HAL_RCC_SYSCFG_CLK_ENABLE( );
     __HAL_RCC_PWR_CLK_ENABLE( );
 
+//__PWR_CLK_ENABLE();
     __HAL_PWR_VOLTAGESCALING_CONFIG( PWR_REGULATOR_VOLTAGE_SCALE1 );
 
-    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE | RCC_OSCILLATORTYPE_LSE;
-    RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-    RCC_OscInitStruct.LSEState = RCC_LSE_ON;
+    RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSI48;
+    RCC_OscInitStruct.HSEState = RCC_HSE_OFF;
+    RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+    RCC_OscInitStruct.HSICalibrationValue = 16;
+    RCC_OscInitStruct.HSI48State = RCC_HSI48_ON;
     RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
-    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
+    RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
     RCC_OscInitStruct.PLL.PLLMUL = RCC_PLLMUL_4;
     RCC_OscInitStruct.PLL.PLLDIV = RCC_PLLDIV_2;
     if( HAL_RCC_OscConfig( &RCC_OscInitStruct ) != HAL_OK )
@@ -249,7 +253,7 @@ void SystemClockConfig( void )
         assert_param( FAIL );
     }
 
-    RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_SYSCLK;
+    RCC_ClkInitStruct.ClockType = (RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2);
     RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
     RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
     RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
@@ -259,10 +263,8 @@ void SystemClockConfig( void )
         assert_param( FAIL );
     }
 
-    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USART1 | RCC_PERIPHCLK_I2C1 | RCC_PERIPHCLK_RTC;
-    PeriphClkInit.Usart1ClockSelection = RCC_USART1CLKSOURCE_PCLK2;
-    PeriphClkInit.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
-    PeriphClkInit.RTCClockSelection = RCC_RTCCLKSOURCE_LSE;
+    PeriphClkInit.PeriphClockSelection = RCC_PERIPHCLK_USB;
+    PeriphClkInit.UsbClockSelection = RCC_USBCLKSOURCE_HSI48;
     if( HAL_RCCEx_PeriphCLKConfig( &PeriphClkInit ) != HAL_OK )
     {
         assert_param( FAIL );

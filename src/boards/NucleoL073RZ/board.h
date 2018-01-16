@@ -78,18 +78,18 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define SWCLK                                       PA_14
 #define SWDAT                                       PA_13
 
-//#define I2C_SCL                                     PB_6
-//#define I2C_SDA                                     PB_7
+#define I2C_SCL                                     PB_8
+#define I2C_SDA                                     PB_9
 
-#define UART_TX                                     PC_1
-#define UART_RX                                     PC_0
+#define UART_TX                                     PA_2
+#define UART_RX                                     PA_3
 
 //#define BAT_LEVEL_PIN                               PA_0
 //#define BAT_LEVEL_CHANNEL                           ADC_CHANNEL_0
 
 #define LED_1                                       PA_5
-#define LED_2                                       PA_11
-#define LED_3                                       PB_9
+//#define LED_2                                       PA_11
+//#define LED_3                                       PB_9
 
 #define NSWITCH_1                                   PC_13
 

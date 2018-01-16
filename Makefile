@@ -42,7 +42,7 @@ PROJECT := NucleoL073RZ
 ###############################################################################
 # Objects and Paths
 
-OBJECTS += ./src/apps/LoRaMac/classA/$(PROJECT)/main.o
+OBJECTS += ./src/apps/test/$(PROJECT)/main.o
 OBJECTS += ./src/boards/mcu/stm32/utilities.o
 OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal.o
 #OBJECTS += ./src/boards/mcu/stm32/STM32L0xx_HAL_Driver/Src/stm32l0xx_hal_adc.o

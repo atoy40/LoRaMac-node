@@ -1,21 +1,45 @@
-/* Memory regions.*/ 
+/* Linker script to configure memory regions. */
 MEMORY
 {
-  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 192K
-  RAM (rwx)  : ORIGIN = 0x20000000, LENGTH = 20K
+  FLASH (rx) : ORIGIN = 0x08000000, LENGTH = 192k
+  RAM (rwx) : ORIGIN = 0x200000C0, LENGTH = 20K - 0xC0
 }
 
-/* Entry Point */
+/* Linker script to place sections and symbol values. Should be used together
+ * with other linker script that defines memory regions FLASH and RAM.
+ * It references following symbols, which must be defined in code:
+ *   Reset_Handler : Entry of reset handler
+ *
+ * It defines following symbols, which code can use without definition:
+ *   __exidx_start
+ *   __exidx_end
+ *   __etext
+ *   __data_start__
+ *   __preinit_array_start
+ *   __preinit_array_end
+ *   __init_array_start
+ *   __init_array_end
+ *   __fini_array_start
+ *   __fini_array_end
+ *   __data_end__
+ *   __bss_start__
+ *   __bss_end__
+ *   __end__
+ *   end
+ *   __HeapLimit
+ *   __StackLimit
+ *   __StackTop
+ *   __stack
+ *   _estack
+ */
 ENTRY(Reset_Handler)
 
-/* Define output sections */
 SECTIONS
 {
     .text :
     {
         KEEP(*(.isr_vector))
         *(.text*)
-
         KEEP(*(.init))
         KEEP(*(.fini))
 
@@ -38,7 +62,7 @@ SECTIONS
         KEEP(*(.eh_frame*))
     } > FLASH
 
-    .ARM.extab :
+    .ARM.extab : 
     {
         *(.ARM.extab* .gnu.linkonce.armextab.*)
     } > FLASH
