@@ -73,6 +73,7 @@ OBJECTS += ./src/boards/$(PROJECT)/uart-board.o
 #OBJECTS += ./src/boards/$(PROJECT)/uart-usb-board.o
 OBJECTS += ./src/boards/$(PROJECT)/cmsis/system_stm32l0xx.o
 OBJECTS += ./src/boards/$(PROJECT)/cmsis/arm-gcc/startup_stm32l073xx.o
+OBJECTS += ./src/boards/$(PROJECT)/cmsis/arm-gcc/syscalls.o
 OBJECTS += ./src/mac/LoRaMac.o
 OBJECTS += ./src/mac/LoRaMacCrypto.o
 OBJECTS += ./src/mac/region/Region.o
@@ -125,14 +126,14 @@ PREPROC = 'arm-none-eabi-cpp' '-E' '-P' '-Wl,--gc-sections' '-Wl,-n' '-mcpu=cort
 
 
 C_FLAGS += -std=gnu99
-C_FLAGS += -flto
+#C_FLAGS += -flto
 C_FLAGS += -DREGION_EU868
 C_FLAGS += -DUSE_HAL_DRIVER
 C_FLAGS += -DSTM32L073xx
 
 CXX_FLAGS += -std=gnu++98
 CXX_FLAGS += -fno-rtti
-CXX_FLAGS += -flto
+#CXX_FLAGS += -flto
 CXX_FLAGS += -Wvla
 CXX_FLAGS += -DREGION_EU868
 CXX_FLAGS += -DUSE_HAL_DRIVER
@@ -144,7 +145,7 @@ ASM_FLAGS += -I.
 
 
 #LD_FLAGS :=-Wl,--gc-sections -Wl,--wrap,main -Wl,--wrap,_malloc_r -Wl,--wrap,_free_r -Wl,--wrap,_realloc_r -Wl,--wrap,_memalign_r -Wl,--wrap,_calloc_r -Wl,--wrap,exit -Wl,--wrap,atexit -Wl,-n -mcpu=cortex-m0plus -mthumb 
-LD_FLAGS :=-Wl,--gc-sections -Wl,-n -mcpu=cortex-m0plus -mthumb -specs=nano.specs -flto
+LD_FLAGS :=-Wl,--gc-sections -Wl,-n -mcpu=cortex-m0plus -mthumb -specs=nano.specs #-flto
 
 LD_SYS_LIBS :=-Wl,--start-group -lstdc++ -lsupc++ -lm -lc -lgcc -lnosys  -Wl,--end-group
 

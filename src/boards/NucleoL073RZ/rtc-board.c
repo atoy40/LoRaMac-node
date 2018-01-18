@@ -190,12 +190,12 @@ void RtcInit( void )
 
     if( RtcInitialized == false )
     {
-        //__HAL_RCC_RTC_ENABLE( );
+        __HAL_RCC_RTC_ENABLE( );
 
         RtcHandle.Instance = RTC;
         RtcHandle.Init.HourFormat = RTC_HOURFORMAT_24;
-        RtcHandle.Init.AsynchPrediv = 7; // RTC_ASYNCH_PREDIV;
-        RtcHandle.Init.SynchPrediv = LSE_VALUE / (RtcHandle.Init.AsynchPrediv + 1) - 1;;  // RTC_SYNCH_PREDIV;
+        RtcHandle.Init.AsynchPrediv = PREDIV_A; // RTC_ASYNCH_PREDIV;
+        RtcHandle.Init.SynchPrediv = PREDIV_S;  // RTC_SYNCH_PREDIV;
 
         RtcHandle.Init.OutPut = RTC_OUTPUT_DISABLE;
         RtcHandle.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;

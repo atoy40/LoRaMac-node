@@ -25,9 +25,9 @@ void UartMcuInit( Uart_t *obj, uint8_t uartId, PinNames tx, PinNames rx )
 {
     obj->UartId = uartId;
 
-    __HAL_RCC_USART1_FORCE_RESET( );
-    __HAL_RCC_USART1_RELEASE_RESET( );
-    __HAL_RCC_USART1_CLK_ENABLE( );
+    __HAL_RCC_USART2_FORCE_RESET( );
+    __HAL_RCC_USART2_RELEASE_RESET( );
+    __HAL_RCC_USART2_CLK_ENABLE( );
 
     GpioInit( &obj->Tx, tx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART1 );
     GpioInit( &obj->Rx, rx, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF4_USART1 );
@@ -35,7 +35,7 @@ void UartMcuInit( Uart_t *obj, uint8_t uartId, PinNames tx, PinNames rx )
 
 void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_t wordLength, StopBits_t stopBits, Parity_t parity, FlowCtrl_t flowCtrl )
 {
-    UartHandle.Instance = USART1;
+    UartHandle.Instance = USART2;
     UartHandle.Init.BaudRate = baudrate;
 
     if( mode == TX_ONLY )
@@ -127,8 +127,8 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
         assert_param( FAIL );
     }
 
-    HAL_NVIC_SetPriority( USART1_IRQn, 1, 0 );
-    HAL_NVIC_EnableIRQ( USART1_IRQn );
+    HAL_NVIC_SetPriority( USART2_IRQn, 1, 0 );
+    HAL_NVIC_EnableIRQ( USART2_IRQn );
 
     /* Enable the UART Data Register not empty Interrupt */
     HAL_UART_Receive_IT( &UartHandle, &RxData, 1 );
@@ -136,9 +136,9 @@ void UartMcuConfig( Uart_t *obj, UartMode_t mode, uint32_t baudrate, WordLength_
 
 void UartMcuDeInit( Uart_t *obj )
 {
-    __HAL_RCC_USART1_FORCE_RESET( );
-    __HAL_RCC_USART1_RELEASE_RESET( );
-    __HAL_RCC_USART1_CLK_DISABLE( );
+    __HAL_RCC_USART2_FORCE_RESET( );
+    __HAL_RCC_USART2_RELEASE_RESET( );
+    __HAL_RCC_USART2_CLK_DISABLE( );
 
     GpioInit( &obj->Tx, obj->Tx.pin, PIN_ANALOGIC, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
     GpioInit( &obj->Rx, obj->Rx.pin, PIN_ANALOGIC, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
@@ -213,7 +213,7 @@ void HAL_UART_ErrorCallback( UART_HandleTypeDef *handle )
     HAL_UART_Receive_IT( &UartHandle, &RxData, 1 );
 }
 
-void USART1_IRQHandler( void )
+void USART2_IRQHandler( void )
 {
     HAL_UART_IRQHandler( &UartHandle );
 }

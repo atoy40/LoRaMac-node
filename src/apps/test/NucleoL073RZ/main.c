@@ -2,10 +2,14 @@
 
 static TimerEvent_t Led1Timer;
 
-static Gpio_t Button;
+static uint32_t state = 0;
+
+//static Gpio_t Button;
 
 void timerCb() {
-    GpioWrite( &Led1, 1);
+    state = 1 - state;
+    GpioWrite( &Led1, state);
+    TimerStart(&Led1Timer);
 }
 
 /**
@@ -14,19 +18,18 @@ void timerCb() {
 int main( void )
 {
         BoardInitMcu( );
-        //BoardInitPeriph( );
+        BoardInitPeriph( );
 
-       /* TimerInit(&Led1Timer, &timerCb);
-        TimerSetValue(&Led1Timer, 1000);
-        TimerStart(&Led1Timer);*/
+        TimerInit(&Led1Timer, &timerCb);
+        TimerSetValue(&Led1Timer, GetBoardPowerSource() == BATTERY_POWER ? 100 : 500);
+        TimerStart(&Led1Timer);
 
-        GpioInit( &Button, NSWITCH_1, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
-        GpioSetInterrupt( &Button, IRQ_RISING_EDGE, IRQ_MEDIUM_PRIORITY, ( GpioIrqHandler * )timerCb);
+        //GpioInit( &Button, NSWITCH_1, PIN_INPUT, PIN_PUSH_PULL, PIN_NO_PULL, 0 );
+        //GpioSetInterrupt( &Button, IRQ_RISING_EDGE, IRQ_MEDIUM_PRIORITY, ( GpioIrqHandler * )timerCb);
 
         while(1) {
-            GpioWrite( &Led1, 1);
-            DelayMs(1000);
-            GpioWrite( &Led1, 0);
+            printf("bla\r\n");
+            //UartMcuPutChar( &Uart1, 'a' );
             DelayMs(1000);
         }
 }
