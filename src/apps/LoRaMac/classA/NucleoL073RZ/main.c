@@ -655,7 +655,7 @@ int main( void )
             case DEVICE_STATE_JOIN:
             {
                 // Initialize LoRaMac device unique ID
-                BoardGetUniqueId( DevEui );
+                //BoardGetUniqueId( DevEui );
 
 #if( OVER_THE_AIR_ACTIVATION != 0 )
                 MlmeReq_t mlmeReq;

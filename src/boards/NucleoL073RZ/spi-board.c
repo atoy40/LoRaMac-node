@@ -30,54 +30,26 @@ void SpiInit( Spi_t *obj, PinNames mosi, PinNames miso, PinNames sclk, PinNames 
 {
     BoardDisableIrq( );
 
-    // Choose SPI interface according to the given pins
-    if( mosi == PB_5 )
+    __HAL_RCC_SPI1_FORCE_RESET( );
+    __HAL_RCC_SPI1_RELEASE_RESET( );
+
+    __HAL_RCC_SPI1_CLK_ENABLE( );
+
+    obj->Spi.Instance = ( SPI_TypeDef* )SPI1_BASE;
+
+    GpioInit( &obj->Mosi, mosi, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
+    GpioInit( &obj->Miso, miso, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
+    GpioInit( &obj->Sclk, sclk, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
+    GpioInit( &obj->Nss, nss, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF0_SPI1 );
+
+    if( nss == NC )
     {
-        __HAL_RCC_SPI1_FORCE_RESET( );
-        __HAL_RCC_SPI1_RELEASE_RESET( );
-
-        __HAL_RCC_SPI1_CLK_ENABLE( );
-
-        obj->Spi.Instance = ( SPI_TypeDef* )SPI1_BASE;
-
-        GpioInit( &obj->Mosi, mosi, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
-        GpioInit( &obj->Miso, miso, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
-        GpioInit( &obj->Sclk, sclk, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI1 );
-        GpioInit( &obj->Nss, nss, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF0_SPI1 );
-
-        if( nss == NC )
-        {
-            obj->Spi.Init.NSS = SPI_NSS_SOFT;
-            SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 0 );
-        }
-        else
-        {
-            SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 1 );
-        }
+        obj->Spi.Init.NSS = SPI_NSS_SOFT;
+        SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 0 );
     }
-    else if( mosi == PB_15 )
+    else
     {
-        __HAL_RCC_SPI2_FORCE_RESET( );
-        __HAL_RCC_SPI2_RELEASE_RESET( );
-
-        __HAL_RCC_SPI2_CLK_ENABLE( );
-
-        obj->Spi.Instance = ( SPI_TypeDef* )SPI2_BASE;
-
-        GpioInit( &obj->Mosi, mosi, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI2 );
-        GpioInit( &obj->Miso, miso, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI2 );
-        GpioInit( &obj->Sclk, sclk, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_DOWN, GPIO_AF0_SPI2 );
-        GpioInit( &obj->Nss, nss, PIN_ALTERNATE_FCT, PIN_PUSH_PULL, PIN_PULL_UP, GPIO_AF0_SPI2 );
-
-        if( nss == NC )
-        {
-            obj->Spi.Init.NSS = SPI_NSS_SOFT;
-            SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 0 );
-        }
-        else
-        {
-            SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 1 );
-        }
+        SpiFormat( obj, SPI_DATASIZE_8BIT, SPI_POLARITY_LOW, SPI_PHASE_1EDGE, 1 );
     }
     SpiFrequency( obj, 10000000 );
 

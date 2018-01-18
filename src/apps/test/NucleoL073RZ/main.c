@@ -2,7 +2,7 @@
 #include "LoRaMac.h"
 #include "LoRaMacTest.h"
 
-#define IEEE_OUI                                    0x00, 0x00, 0x00
+#define IEEE_OUI                                    0x00, 0xC0, 0xE1
 #define LORAWAN_DEVICE_EUI                          { IEEE_OUI, 0xC8, 0x1E, 0xFE, 0xBA, 0xA7 }
 #define LORAWAN_APPLICATION_EUI                     { 0x70, 0xB3, 0xD5, 0x7E, 0xF0, 0x00, 0x40, 0x5D }
 #define LORAWAN_APPLICATION_KEY                     { 0x15, 0x8A, 0x34, 0x3B, 0xCC, 0x3E, 0xDE, 0xEC, 0xD2, 0x93, 0x45, 0xB4, 0xD3, 0x64, 0xA4, 0x37 }
@@ -18,9 +18,9 @@ static uint32_t state = 0;
 //static Gpio_t Button;
 
 void timerCb() {
+    TimerStop(&Led1Timer);
     state = 1 - state;
-    GpioWrite( &Led1, state);
-    TimerStart(&Led1Timer);
+    GpioWrite( &Led1, 0);
 }
 
 static void McpsConfirm( McpsConfirm_t *mcpsConfirm )
@@ -37,7 +37,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
     {
         case MLME_JOIN:
         {
-            TimerStop(&Led1Timer);
+            GpioWrite( &Led1, 1);
             TimerSetValue(&Led1Timer, 100);
             TimerStart(&Led1Timer);
             return;
@@ -48,7 +48,7 @@ static void MlmeConfirm( MlmeConfirm_t *mlmeConfirm )
         }
     }
 
-    TimerStop(&Led1Timer);
+    GpioWrite( &Led1, 1);
     TimerSetValue(&Led1Timer, 1000);
     TimerStart(&Led1Timer);
 }
@@ -73,10 +73,15 @@ int main( void )
     LoRaMacCallbacks.GetBatteryLevel = BoardGetBatteryLevel;
 
     TimerInit(&Led1Timer, &timerCb);
-    TimerSetValue(&Led1Timer, GetBoardPowerSource() == BATTERY_POWER ? 100 : 500);
-    TimerStart(&Led1Timer);
+
+    printf("Led started\r\n");
+    Delay(1);
 
     LoRaMacInitialization( &LoRaMacPrimitives, &LoRaMacCallbacks, LORAMAC_REGION_EU868 );
+
+    Delay(1);
+    printf("Loramac initialized\r\n");
+
     mibReq.Type = MIB_ADR;
     mibReq.Param.AdrEnable = true;
     LoRaMacMibSetRequestConfirm( &mibReq );
@@ -90,7 +95,7 @@ int main( void )
     MlmeReq_t mlmeReq;
 
     // Initialize LoRaMac device unique ID
-    BoardGetUniqueId( DevEui );
+    //BoardGetUniqueId( DevEui );
 
     mlmeReq.Type = MLME_JOIN;
 
@@ -105,7 +110,6 @@ int main( void )
     //GpioSetInterrupt( &Button, IRQ_RISING_EDGE, IRQ_MEDIUM_PRIORITY, ( GpioIrqHandler * )timerCb);
 
     while(1) {
-        printf("bla\r\n");
         TimerLowPowerHandler( );
     }
 }

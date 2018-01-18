@@ -87,7 +87,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 //#define BAT_LEVEL_PIN                               PA_0
 //#define BAT_LEVEL_CHANNEL                           ADC_CHANNEL_0
 
-#define LED_1                                       PC_0 //PA_5
+#define LED_1                                       PC_14 // PA_5
 //#define LED_2                                       PA_11
 //#define LED_3                                       PB_9
 
