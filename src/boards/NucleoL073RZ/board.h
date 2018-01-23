@@ -66,8 +66,7 @@ Maintainer: Miguel Luis and Gregory Cristian
 #define RADIO_DIO_4                                 PA_9
 #define RADIO_DIO_5                                 PC_7
 
-#define RADIO_ANT_SWITCH_RX                         PC_1
-#define RADIO_ANT_SWITCH_TX                         PB_0
+#define RADIO_ANT_SWITCH                            PC_1
 
 /*#define OSC_LSE_IN                                  PC_14
 #define OSC_LSE_OUT                                 PC_15
